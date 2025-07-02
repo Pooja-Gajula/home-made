@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fffaf0;
+            padding: 20px;
+        }
+        .checkout-form {
+            width: 60%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            text-align: center;
+            color: #d9534f;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f87171;
+            color: white;
+        }
+        .submit-btn {
+            background-color: #f87171;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        .total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-form">
+        <h2>Checkout</h2>
+
+        <form method="post">
+            <label for="name">Full Name:</label>
+            <input type="text" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+
+            <label for="address">Shipping Address:</label>
+            <textarea name="address" rows="3" required></textarea>
+
+            <h3>Order Summary</h3>
+            {% if cart %}
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Price (₹)</th>
+                    <th>Quantity</th>
+                    <th>Total (₹)</th>
+                </tr>
+                {% for item in cart %}
+                <tr>
+                    <td>{{ item.product }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price * item.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p class="total">Grand Total: ₹{{ grand_total }}</p>
+            {% else %}
+                <p>No items in cart.</p>
+            {% endif %}
+
+            <button type="submit" class="submit-btn">Place Order</button>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logged Out</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff8e1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .logout-box {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 {
+            color: #ff7043;
+            margin-bottom: 20px;
+        }
+
+        a.button {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 24px;
+            background-color: #ff7043;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        a.button:hover {
+            background-color: #f4511e;
+        }
+    </style>
+</head>
+<body>
+
+<div class="logout-box">
+    <h2>You have been successfully logged out.</h2>
+    <a href="{{ url_for('login') }}" class="button">Login Again</a>
+    <a href="{{ url_for('home') }}" class="button">Go to Home Page</a>
+    <a href="{{ url_for('products') }}" class="button">Continue Shopping</a>
+</div>
+
+</body>
+</html>

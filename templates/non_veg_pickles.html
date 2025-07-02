@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Non-Veg Pickles</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .product-card {
+            display: inline-block;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            width: 200px;
+            background-color: #fff5f5;
+        }
+        img {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Non-Veg Pickles</h2>
+    {% for name, price in [
+        ('Anchovy Pickle', 130),
+        ('Chicken Pickle', 150),
+        ('Crab Pickle', 160),
+        ('Dry Fish Pickle', 120),
+        ('Egg Pickle', 110),
+        ('Fish Pickle', 140),
+        ('Mutton Pickle', 180),
+        ('Prawn Pickle', 170)
+    ] %}
+    <div class="product-card">
+        <img src="{{ url_for('static', filename='images/non_veg_pickles/' + name + '.jpg') }}" alt="{{ name }}">
+        <h3>{{ name }}</h3>
+        <p>Price: ₹{{ price }}</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="product" value="{{ name }}">
+            <input type="hidden" name="price" value="{{ price }}">
+            <input type="number" name="quantity" value="1" min="1">
+            <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+    {% endfor %}
+</body>
+</html>

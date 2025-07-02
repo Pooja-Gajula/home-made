@@ -1,0 +1,91 @@
+<!-- veg_pickles.html --><!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veg Pickles</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .products-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .product-card {
+      width: 200px;
+      margin: 15px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      text-align: center;
+      background-color: #fffdf5;
+    }
+    .product-card img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .product-card h3 {
+      color: #d84315;
+      margin: 10px 0;
+    }
+    .product-card p {
+      margin-bottom: 10px;
+      color: #5d4037;
+    }
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #ff6f00;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e65100;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Veg Pickles</h1>
+  </header>  <nav>
+    <a href="/">Home</a>
+    <a href="/products">Products</a>
+    <a href="/cart">Cart</a>
+    <a href="/checkout">Checkout</a>
+    <a href="/contact">Contact</a>
+  </nav>  <div class="products-container">
+    {% for name, price in [
+      ('Gongura Pickle', 70),
+      ('Mango Pickle', 65),
+      ('Tomato Pickle', 60),
+      ('Lemon Pickle', 50),
+      ('Amla Pickle', 55),
+      ('Garlic Pickle', 60),
+      ('Ginger Pickle', 60),
+      ('Tamarind Pickle', 50)
+    ] %}
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='images/veg_pickles/' + name + '.jpg') }}" alt="{{ name }}">
+      <h3>{{ name }}</h3>
+      <p>Price: ₹{{ price }}</p>
+      <form action="{{ url_for('add_to_cart') }}" method="post">
+        <input type="hidden" name="product" value="{{ name }}">
+        <input type="hidden" name="price" value="{{ price }}">
+        <input type="number" name="quantity" value="1" min="1">
+        <button type="submit">Add to Cart</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>  <footer>
+    &copy; 2025 Homemade Pickles & Snacks. All rights reserved.
+  </footer>
+</body>
+</html>

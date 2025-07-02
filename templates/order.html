@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Details - Homemade Pickles & Snacks</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background-color: #fff8f0;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    h2 {
+      color: #e65100;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #ffcc80;
+    }
+    .total {
+      font-weight: bold;
+      text-align: right;
+    }
+    .back-link {
+      text-align: center;
+    }
+    .back-link a {
+      background-color: #ff6f00;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .back-link a:hover {
+      background-color: #e65100;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Order Details</h1>
+  </header>  <nav>
+    <a href="/">Home</a>
+    <a href="/products">Products</a>
+    <a href="/cart">Cart</a>
+    <a href="/contact">Contact</a>
+  </nav>  <div class="container">
+    <h2>Your Order Summary</h2>{% if session.cart %}
+<table>
+  <tr>
+    <th>Product</th>
+    <th>Price</th>
+    <th>Quantity</th>
+    <th>Total</th>
+  </tr>
+  {% set grand_total = 0 %}
+  {% for item in session.cart %}
+  {% set total = item.price * item.quantity %}
+  {% set grand_total = grand_total + total %}
+  <tr>
+    <td>{{ item.product }}</td>
+    <td>₹{{ item.price }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>₹{{ total }}</td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <td colspan="3" class="total">Grand Total</td>
+    <td class="total">₹{{ grand_total }}</td>
+  </tr>
+</table>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+
+<div class="back-link">
+  <a href="/checkout">Proceed to Checkout</a>
+</div>
+
+  </div>  <footer>
+    &copy; 2025 Homemade Pickles & Snacks. All rights reserved.
+  </footer>
+</body>
+</html>

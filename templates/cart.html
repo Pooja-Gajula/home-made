@@ -1,0 +1,70 @@
+<!DOCTYPE html><html>
+<head>
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: #fffdf5;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #ffcc80;
+    }
+    .cart-actions {
+      text-align: center;
+      margin: 20px;
+    }
+    .cart-actions form {
+      display: inline-block;
+      margin: 0 10px;
+    }
+    .cart-actions button {
+      background-color: #ff6f00;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .cart-actions button:hover {
+      background-color: #e65100;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Your Shopping Cart</h1>
+  </header>  <nav>
+    <a href="/">Home</a>
+    <a href="/products">Products</a>
+    <a href="/cart">Cart</a>
+    <a href="/checkout">Checkout</a>
+    <a href="/contact">Contact</a>
+  </nav>{% if session.cart %} <table> <tr> <th>Product</th> <th>Price (₹)</th> <th>Quantity</th> <th>Total (₹)</th> </tr> {% set grand_total = 0 %} {% for item in session.cart %} {% set total = item.price * item.quantity %} {% set grand_total = grand_total + total %} <tr> <td>{{ item.product }}</td> <td>{{ item.price }}</td> <td>{{ item.quantity }}</td> <td>{{ total }}</td> </tr> {% endfor %} <tr> <td colspan="3"><strong>Grand Total</strong></td> <td><strong>₹{{ grand_total }}</strong></td> </tr> </table>
+
+<div class="cart-actions">
+  <form action="/clear_cart" method="post">
+    <button type="submit">Clear Cart</button>
+  </form>
+  <form action="/products">
+    <button type="submit">Continue Shopping</button>
+  </form>
+  <form action="/checkout">
+    <button type="submit">Proceed to Checkout</button>
+  </form>
+</div>
+
+{% else %} <p style="text-align:center; margin-top: 40px;">Your cart is empty.</p> {% endif %}
+
+  <footer>
+    &copy; 2025 Homemade Pickles & Snacks. All rights reserved.
+  </footer>
+</body>
+</html>

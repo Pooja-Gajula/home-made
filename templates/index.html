@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Homemade Pickles & Snacks</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .intro {
+      text-align: center;
+      padding: 50px 20px;
+      background-color: #fff8f0;
+    }
+    .intro h2 {
+      color: #d84315;
+      font-size: 32px;
+    }
+    .intro p {
+      font-size: 17px;
+      color: #4e342e;
+      margin: 20px 0;
+    }
+    .cta-btn {
+      background-color: #ff6f00;
+      color: white;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      text-decoration: none;
+    }
+    .cta-btn:hover {
+      background-color: #e65100;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Homemade Pickles & Snacks</h1>
+  </header>  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About Us</a>
+    <a href="/products">Products</a>
+    <a href="/cart">Cart</a>
+    <a href="/contact">Contact</a>
+  </nav>  <div class="intro">
+    <h2>Traditional Taste, Modern Touch</h2>
+    <p>We bring you premium quality pickles and snacks straight from our kitchen to your doorstep. Discover a variety of flavorful items that spark joy with every bite!</p>
+    <a href="/products" class="cta-btn">Shop Now</a>
+  </div>  <footer>
+    &copy; 2025 Homemade Pickles & Snacks. All rights reserved.
+  </footer>
+</body>
+</html>

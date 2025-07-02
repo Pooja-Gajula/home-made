@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fffaf0;
+            padding: 20px;
+        }
+        .contact-form {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #d9534f;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #f87171;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 6px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contact-form">
+        <h2>Contact Us</h2>
+
+        {% if success %}
+        <p class="success">Thank you! Your message has been sent successfully.</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('contact') }}">
+            <label for="name">Your Name:</label>
+            <input type="text" name="name" required>
+
+            <label for="email">Your Email:</label>
+            <input type="email" name="email" required>
+
+            <label for="message">Your Message:</label>
+            <textarea name="message" rows="5" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+</body>
+</html>
