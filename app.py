@@ -178,8 +178,11 @@ def checkout():
         summary = f"Order ID: {order_id}\nName: {name}\nTotal: ₹{grand_total}\n\nThank you for your order!"
         send_order_email(email, summary)
 
-        # (Optional) SNS call is defined but not triggered here
-        # send_sns_notification("New order received.")
+        # ✅ Added SNS Notification call here
+        send_sns_notification(
+            message=f"New Order Placed!\nOrder ID: {order_id}\nCustomer: {name}\nTotal: ₹{grand_total}",
+            topic_arn='arn:aws:sns:ap-south-1:your-account-id:your-topic-name'  # Replace with actual ARN
+        )
 
         session.pop('cart', None)
         logger.info("Order placed and cart cleared.")
