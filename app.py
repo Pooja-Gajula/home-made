@@ -15,7 +15,7 @@ app.secret_key = 'simple_secure_key_9472'
 
 # AWS Configuration
 AWS_REGION = 'ap-south-1'
-DYNAMODB_TABLE = 'Orders'  # ✅ Changed to match lab instruction
+DYNAMODB_TABLE = 'PickleOrders'
 
 # Email settings
 EMAIL_HOST = 'smtp.gajulapoojacsd@gmail.com'
@@ -49,14 +49,48 @@ logger = logging.getLogger(__name__)
 
 dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
 orders_table = dynamodb.Table(DYNAMODB_TABLE)
-users_table = dynamodb.Table('Users')  # ✅ Changed from 'users' to 'Users'
+users_table = dynamodb.Table('users')
 
 # SNS Setup
 sns = boto3.client('sns', region_name=AWS_REGION)
 
 # -------------------- Helper Functions --------------------
 
-# (No changes to helper functions)
+def send_order_email(to_email, order_summary):
+    try:
+        msg = MIMEText(order_summary)
+        msg['Subject'] = 'Your Order Confirmation'
+        msg['From'] = EMAIL_USER
+        msg['To'] = to_email
+
+        with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT) as server:
+            server.starttls()
+            server.login(EMAIL_USER, EMAIL_PASSWORD)
+            server.send_message(msg)
+
+        logger.info("Order email sent to %s", to_email)
+    except Exception as e:
+        logger.error("Failed to send email: %s", e)
+
+def save_order_to_dynamodb(order_data):
+    try:
+        orders_table.put_item(Item=order_data)
+        logger.info("Order saved to DynamoDB: %s", order_data['order_id'])
+    except Exception as e:
+        logger.error("DynamoDB error: %s", e)
+
+def send_sns_notification(message, phone_number=None, topic_arn=None):
+    try:
+        if phone_number:
+            sns.publish(PhoneNumber=phone_number, Message=message)
+            logger.info(f"SNS SMS sent to {phone_number}")
+        elif topic_arn:
+            sns.publish(TopicArn=topic_arn, Message=message)
+            logger.info(f"SNS message published to topic {topic_arn}")
+        else:
+            logger.info("SNS notification skipped (no phone number or topic)")
+    except Exception as e:
+        logger.error("SNS send failed: %s", e)
 
 # -------------------- Routes --------------------
 
@@ -144,10 +178,8 @@ def checkout():
         summary = f"Order ID: {order_id}\nName: {name}\nTotal: ₹{grand_total}\n\nThank you for your order!"
         send_order_email(email, summary)
 
-        send_sns_notification(
-            message=f"New Order Placed!\nOrder ID: {order_id}\nCustomer: {name}\nTotal: ₹{grand_total}",
-            topic_arn='arn:aws:sns:ap-south-1:your-account-id:your-topic-name'  # Replace this
-        )
+        # (Optional) SNS call is defined but not triggered here
+        # send_sns_notification("New order received.")
 
         session.pop('cart', None)
         logger.info("Order placed and cart cleared.")
@@ -177,17 +209,17 @@ def contact():
 def login():
     message = ''
     if request.method == 'POST':
-        email = request.form['email']  # ✅ changed from 'username'
+        username = request.form['username']
         password = request.form['password']
 
-        response = users_table.get_item(Key={'Email': email})  # ✅ key is 'Email'
+        response = users_table.get_item(Key={'username': username})
         user = response.get('Item')
 
         if user and check_password_hash(user['password'], password):
-            session['email'] = email  # ✅ changed to email
+            session['username'] = username
             return redirect(url_for('home'))
         else:
-            message = "Invalid email or password."
+            message = "Invalid username or password."
 
     return render_template('login.html', message=message)
 
@@ -201,14 +233,14 @@ def signup():
     email = request.form['email']
     password = request.form['password']
 
-    existing_user = users_table.get_item(Key={'Email': email})  # ✅ key is 'Email'
+    existing_user = users_table.get_item(Key={'username': username})
     if 'Item' in existing_user:
-        return render_template('signup.html', message="Email already exists.")
+        return render_template('signup.html', message="Username already exists.")
 
     hashed_password = generate_password_hash(password)
     users_table.put_item(Item={
-        'Email': email,
         'username': username,
+        'email': email,
         'password': hashed_password
     })
 
