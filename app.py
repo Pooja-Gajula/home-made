@@ -49,7 +49,6 @@ logger = logging.getLogger(__name__)
 
 dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
 orders_table = dynamodb.Table(DYNAMODB_TABLE)
-users_table = dynamodb.Table('users')
 
 # SNS Setup
 sns = boto3.client('sns', region_name=AWS_REGION)
